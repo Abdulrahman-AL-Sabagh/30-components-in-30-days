@@ -8,22 +8,16 @@ export default function Modal({
   },
   children,
   title = "",
-  isHidden = true,
+  isHidden = false,
 }) {
   const [hidden, setHidden] = useState(isHidden);
 
   return (
     <>
-      <button
-        className="Hello World bg-red-600 p-8 text-white"
-        onClick={() => setHidden(!hidden)}
-      >
-        Show modal
-      </button>
-      <div className="m-0 p-0">
+      <div className="relative w-screen h-screen flex justify-center  ">
         <div
-          className={` bg-white shadow-gray-700 shadow-2xl rounded-xl left-1/2 translate-y-[50%]   absolute w-96 h-fit transition-all    ${
-            hidden ? "-top-1/2 " : "top-1/4  "
+          className={` bg-white shadow-gray-700 shadow-2xl rounded-xl   absolute w-96 h-fit transition-all    ${
+            hidden ? "-translate-y-[200%] " : "translate-y-[100%]"
           } `}
         >
           <h2 className=" p-4 border-b-2 border-b-gray-00 ">
