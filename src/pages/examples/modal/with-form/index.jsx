@@ -78,7 +78,7 @@ export default function SignupModal() {
         You have no Account? What are you wating for?
       </h2>
       <TextButton
-        className="bg-red-400 text-lg  text-white p-4 rounded-full "
+        className="bg-red-400 text-lg  text-white p-4 rounded-xl "
         onClick={() => setIsOpened(!isOpened)}
       >
         Signup
