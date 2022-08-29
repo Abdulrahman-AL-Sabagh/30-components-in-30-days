@@ -73,13 +73,16 @@ export default function SignupModal() {
   ];
 
   return (
-    <>
-      <button
-        className="bg-red-400 text-white p-4"
+    <div className="w-screen h-screen flex-col gap-4 flex justify-center items-center">
+      <h2 className="text-white">
+        You have no Account? What are you wating for?
+      </h2>
+      <TextButton
+        className="bg-red-400 text-white p-4 "
         onClick={() => setIsOpened(!isOpened)}
       >
         Signup
-      </button>
+      </TextButton>
       <Modal
         className={"bg-gray-800"}
         close={() => setIsOpened(false)}
@@ -118,6 +121,6 @@ export default function SignupModal() {
           </TextButton>
         </div>
       </Modal>
-    </>
+    </div>
   );
 }
