@@ -18,11 +18,7 @@ export default function SignupModal() {
   const validateName = (text) => {
     return text.length < 3 ? "Name should have 3 characters or more" : "";
   };
-  /**
-   *
-   * @param {string} text
-   * @returns {string}
-   */
+
   const validateEmail = (text) => {
     const emailProviders = ["gmail", "hotmail", "yahoo", "outlook"];
     const errorMessage = "email is not valid";
