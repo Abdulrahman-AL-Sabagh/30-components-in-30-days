@@ -53,7 +53,6 @@ export default function SignupModal() {
       name: "email",
       placeholder: "Email",
       value: form.email,
-      label: "Email",
       type: "email",
       validations: [validateEmail],
     },
@@ -61,7 +60,6 @@ export default function SignupModal() {
       name: "name",
       value: form.name,
       placeholder: "Username",
-      label: "Username",
       type: "text",
       validations: [validateName],
     },
@@ -69,7 +67,6 @@ export default function SignupModal() {
       name: "password",
       value: form.password,
       placeholder: "Password",
-      label: "Password",
       type: "password",
       validations: [validatePassword],
     },
@@ -91,21 +88,19 @@ export default function SignupModal() {
         title={"Please enter your data"}
       >
         {inputsData.map((data) => (
-          <>
-            <div className="my-4">
-              {data.label}
-              <WithValidationInput
-                key={data.label}
-                {...data}
-                onChange={(value) => {
-                  setForm((prevState) => ({
-                    ...prevState,
-                    [data.name]: value,
-                  }));
-                }}
-              />
-            </div>
-          </>
+          <div className="my-4" key={data.name}>
+            {data.name} :
+            <WithValidationInput
+              key={data.name}
+              {...data}
+              onChange={(value) => {
+                setForm((prevState) => ({
+                  ...prevState,
+                  [data.name]: value,
+                }));
+              }}
+            />
+          </div>
         ))}
 
         <div className=" w-full flex justify-end mt-8 gap-4 border-t-2 py-3 ">
