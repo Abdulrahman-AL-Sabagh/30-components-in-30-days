@@ -74,9 +74,9 @@ export default function SignupModal() {
 
   return (
     <div className="w-screen h-screen flex-col gap-8 flex justify-center items-center">
-      <h1 className="text-white h">
+      <h2 className="text-white header-one">
         You have no Account? What are you wating for?
-      </h1>
+      </h2>
       <TextButton
         className="bg-red-400 text-xl font-bold text-white p-4 rounded-full "
         onClick={() => setIsOpened(!isOpened)}
