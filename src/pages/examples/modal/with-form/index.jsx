@@ -10,42 +10,89 @@ const WithValidationInput = withValidation(WithLabelInput);
 
 export default function SignupModal() {
   const [isOpened, setIsOpened] = useState(false);
+  const [errors, setErrors] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
   const [form, setForm] = useState({
     email: "",
     name: "",
     password: "",
   });
+
+  const isRequiredError = "This field is required";
+
   const validateName = (text) => {
-    return text.length < 3 ? "Name should have 3 characters or more" : "";
+    if (text.length < 3) {
+      const errorMessage = "Name should have 3 characters or more";
+      setErrors((prevState) => ({ ...prevState, name: errorMessage }));
+      return errorMessage;
+    }
+    return "";
   };
 
   const validateEmail = (text) => {
     const emailProviders = ["gmail", "hotmail", "yahoo", "outlook"];
     const errorMessage = "email is not valid";
-    if (!text.includes("@") || !text.includes(".")) return errorMessage;
+    if (!text.includes("@") || !text.includes(".")) {
+      setErrors((prevState) => ({ ...prevState, email: errorMessage }));
+      return errorMessage;
+    }
+
     // The email@provider.domain
     const splitedEmail = text.split("@");
     const email = splitedEmail[0];
-    if (email.length < 3) return errorMessage;
+    if (email.length < 3) {
+      setErrors((prevState) => ({ ...prevState, email: errorMessage }));
+      return errorMessage;
+    }
 
     const [provider, domain] = splitedEmail[1].split(".");
-    if (!emailProviders.some((item) => item === provider)) return errorMessage;
-    if (domain.length < 2) return errorMessage;
+    if (!emailProviders.some((item) => item === provider)) {
+      setErrors((prevState) => ({ ...prevState, email: errorMessage }));
+      return errorMessage;
+    }
+    if (domain.length < 2) {
+      setErrors((prevState) => ({ ...prevState, email: errorMessage }));
+      return errorMessage;
+    }
+    Object.keys(errors).forEach((key) => (errors[key] = ""));
     return "";
   };
 
   const validatePassword = (text) => {
-    return text.length < 8 ? "Password must contain 8 characters or more" : "";
+    if (text.length < 8) {
+      const errorMessage = "Password must contain 8 characters or more";
+      setErrors((prevState) => ({ ...prevState, password: errorMessage }));
+      return errorMessage;
+    }
+    return "";
   };
 
   function handleSubmit() {
+    const { email, name, password } = form;
+    validateEmail(email);
+    validateName(name);
+    validatePassword(password);
     //Some logic
-    setIsOpened(false);
-    setForm({
-      name: "",
-      email: "",
-      password: "",
+    let formIsValid = false;
+    Object.keys(errors).forEach((key) => {
+      if (form[key].length === 0) {
+        errors[key] = "This field is required";
+        return;
+      }
+      formIsValid = errors[key].length === 0;
     });
+    console.log(formIsValid, errors);
+    if (formIsValid) {
+      setIsOpened(false);
+      setForm({
+        name: "",
+        email: "",
+        password: "",
+      });
+    }
   }
 
   const inputsData = [
