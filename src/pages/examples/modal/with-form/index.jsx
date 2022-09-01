@@ -8,31 +8,37 @@ import Modal from "ui/modal";
 const WithLabelInput = withLabel(TextField);
 const WithValidationInput = withValidation(WithLabelInput);
 
+const submitStyle = `  text-white px-4 py-2 rounded-full shadow-lg hover:opacity-80 transition-opacity`;
+const defaultSubmit = `${submitStyle} bg-green-500`;
+const disabledSubmit = `${submitStyle} bg-slate-500`;
+
 export default function SignupModal() {
   const [isOpened, setIsOpened] = useState(false);
-  const [errors, setErrors] = useState({
-    name: "",
-    email: "",
-    password: "",
-  });
   const [form, setForm] = useState({
     email: "",
     name: "",
     password: "",
   });
+  const [errors, setErrors] = useState({ ...form, disabled: true });
 
   const isRequiredError = "This field is required";
 
-  const validateName = (text) => {
-    if (text.length < 3) {
-      const errorMessage = "Name should have 3 characters or more";
-      setErrors((prevState) => ({ ...prevState, name: errorMessage }));
-      return errorMessage;
-    }
-    return "";
-  };
+  function updateDisabeld() {
+    const x = !Object.keys(errors).every((k) => errors[k].length === 0);
+    console.log(x);
+    setErrors((prevState) => ({ ...prevState, disabled: x }));
+  }
+  function validateName(text) {
+    const errorMessage = "Name should have 3 characters or more";
+    setErrors((prevState) => ({
+      ...prevState,
+      name: text.length < 3 ? errorMessage : "",
+    }));
+    updateDisabeld();
+    return errors.name;
+  }
 
-  const validateEmail = (text) => {
+  function validateEmail(text) {
     const emailProviders = ["gmail", "hotmail", "yahoo", "outlook"];
     const errorMessage = "email is not valid";
     if (!text.includes("@") || !text.includes(".")) {
@@ -57,40 +63,37 @@ export default function SignupModal() {
       setErrors((prevState) => ({ ...prevState, email: errorMessage }));
       return errorMessage;
     }
-    Object.keys(errors).forEach((key) => (errors[key] = ""));
+    setErrors((prevState) => ({ ...prevState, email: "" }));
+    updateDisabeld();
     return "";
-  };
+  }
 
-  const validatePassword = (text) => {
-    if (text.length < 8) {
-      const errorMessage = "Password must contain 8 characters or more";
-      setErrors((prevState) => ({ ...prevState, password: errorMessage }));
-      return errorMessage;
-    }
-    return "";
-  };
+  function validatePassword(text) {
+    const errorMessage = "Password must contain 8 characters or more";
+    setErrors((prevState) => ({
+      ...prevState,
+      password: text.length < 8 ? errorMessage : "",
+    }));
+    updateDisabeld();
+    return errors.password;
+  }
 
   function handleSubmit() {
     const { email, name, password } = form;
-    validateEmail(email);
-    validateName(name);
-    validatePassword(password);
-    //Some logic
-    let formIsValid = false;
-    Object.keys(errors).forEach((key) => {
-      if (form[key].length === 0) {
-        errors[key] = "This field is required";
-        return;
-      }
-      formIsValid = errors[key].length === 0;
+    console.table({
+      email: validateEmail(email),
+      name: validateName(name),
+      password: validatePassword(password),
     });
-    console.log(formIsValid, errors);
-    if (formIsValid) {
+    //Some logic
+    console.log(errors.disabled);
+    console.log(errors);
+    if (!errors.disabled) {
       setIsOpened(false);
       setForm({
-        name: "",
         email: "",
         password: "",
+        name: "",
       });
     }
   }
@@ -161,8 +164,11 @@ export default function SignupModal() {
             Cancel
           </TextButton>
           <TextButton
+            disabled={errors.disabled}
             onClick={handleSubmit}
-            className="bg-green-500 text-white px-4 py-2 rounded-full shadow-lg hover:opacity-80 transition-opacity"
+            className={
+              errors.disabled ? `disabled:${disabledSubmit}` : defaultSubmit
+            }
           >
             Submit
           </TextButton>
